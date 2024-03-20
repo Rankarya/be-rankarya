@@ -18,7 +18,8 @@ module.exports = (sequelize, DataTypes) => {
     email: DataTypes.STRING,
     password: DataTypes.STRING,
     account_status: DataTypes.STRING,
-    role: DataTypes.INTEGER
+    role: DataTypes.INTEGER,
+    refresh_token: DataTypes.TEXT
   }, {
     sequelize,
     modelName: 'account',

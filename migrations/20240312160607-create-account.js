@@ -24,6 +24,9 @@ module.exports = {
       role: {
         type: Sequelize.INTEGER
       },
+      refresh_token: {
+        type: Sequelize.TEXT
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
