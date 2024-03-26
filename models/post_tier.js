@@ -19,6 +19,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'post_tier',
+    tableName: 'post_tiers'
   });
   return post_tier;
 };
