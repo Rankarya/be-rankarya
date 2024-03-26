@@ -1,17 +1,52 @@
-const {tier} = require("../models");
+const { tier } = require("../models");
 
 module.exports = {
   getAllTier: async (req, res) => {
     try {
       const tiers = await tier.findAll();
-      res.json({
+      if (tiers.length === 0) {
+        return res.status(404).json({
+          message: "Tidak ada tier yang ditemukan",
+          data: [],
+        });
+      }
+
+      return res.status(200).json({
         message: "Berhasil mendapatkan tier",
         data: tiers,
       });
     } catch (error) {
       console.error(error);
-      res.status(500).json({
-        message: "Internal server error",
+
+      return res.status(500).json({
+        message: "Gagal memuat tier",
+        error: error.message,
+      });
+    }
+  },
+
+  getTierById: async (req, res) => {
+    const tierId = req.params.id; 
+
+    try {
+      const foundTier = await tier.findByPk(tierId);
+
+      if (!foundTier) {
+        return res.status(404).json({
+          message: "Tier tidak ditemukan",
+        });
+      }
+
+      return res.status(200).json({
+        message: "Berhasil mendapatkan tier",
+        data: foundTier,
+      });
+    } catch (error) {
+      console.error(error);
+     
+      return res.status(500).json({
+        message: "Gagal mendapatkan tier",
+        error: error.message, 
       });
     }
   },
@@ -20,19 +55,22 @@ module.exports = {
     let data = req.body;
 
     try {
-      await tier.create({
+      const newTier = await tier.create({
         tier_name: data.tier_name,
         description: data.description,
         price: data.price,
       });
 
-      res.status(201).json({
+      return res.status(200).json({
         message: "Berhasil membuat tier",
+        data: newTier,
       });
     } catch (error) {
       console.error(error);
-      res.status(500).json({
-        message: "Internal server error",
+
+      return res.status(500).json({
+        message: "Gagal membuat tier",
+        error: error.message,
       });
     }
   },
@@ -52,7 +90,7 @@ module.exports = {
         {
           tier_name: data.tier_name,
           description: data.description,
-          price:15
+          price: data.price,
         },
         {
           where: {
@@ -60,7 +98,7 @@ module.exports = {
           },
         }
       );
-      res.json({
+      res.status(200).json({
         message: "Berhasil memperbarui tier",
         data: data,
       });
