@@ -36,4 +36,39 @@ module.exports = {
       });
     }
   },
+
+  updateTierById: async (req, res) => {
+    try {
+      const { id } = req.params;
+      const data = req.body;
+
+      if (!data) {
+        return res.status(404).json({
+          message: "Tier tidak ditemukan",
+        });
+      }
+
+      await tier.update(
+        {
+          tier_name: data.tier_name,
+          description: data.description,
+          price:15
+        },
+        {
+          where: {
+            id: id,
+          },
+        }
+      );
+      res.json({
+        message: "Berhasil memperbarui tier",
+        data: data,
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({
+        message: "Internal Server Error",
+      });
+    }
+  },
 };
